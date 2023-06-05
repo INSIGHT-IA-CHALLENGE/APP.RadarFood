@@ -7,6 +7,9 @@ import Content from "../components/Content";
 import Input from "../components/Input";
 import ImagePerfil from "../components/ImagePerfil";
 import Select from "../components/Select";
+import alert from "../components/Alert";
+import InputMask from "../components/InputMask";
+import { cadastrar } from "../api/usuario";
 
 const Cadastrar = ({navigation}) => {
 
@@ -16,14 +19,79 @@ const Cadastrar = ({navigation}) => {
     const [telefone, setTelefone] = useState('')
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
-    const [tipo, setTipo] = useState('')
+    const [tipo, setTipo] = useState(options[0].value)
 
-    const cadastrar = () => {
-        console.log(foto)
-        console.log(nome)
-        console.log(telefone)
-        console.log(email)
-        console.log(senha)
+    const handleCadastrar = async () => {
+        if(validaCampos()){
+            const usuario = {
+                foto,
+                nome,
+                telefone,
+                email,
+                senha,
+                tipoUsuario: tipo,
+                ativo: true
+            }
+
+            const response = await cadastrar(usuario);
+
+            if(response.ok){
+                alert('Sucesso', 'Cadastro realizado com sucesso')
+                navigation.navigate('Login')
+            }
+            else if(response.status === 409){
+                alert('Erro', 'Email ou Telefone já cadastrado')
+            }
+            else{
+                alert('Erro', 'Erro ao realizar o cadastro')
+            }
+        }
+    }
+
+    const validaCampos = () => {
+        if(!foto){
+            alert('Erro', 'Selecione uma foto')
+            return false
+        }
+
+        if(!nome){
+            alert('Erro', 'Digite seu nome')
+            return false
+        }
+        else if (nome.length < 3){
+            alert('Erro', 'O nome deve ter no mínimo 3 caracteres')
+            return false
+        }
+
+        if(!telefone){
+            alert('Erro', 'Digite seu telefone')
+            return false
+        }
+        else if(telefone.length < 14){
+            alert('Erro', 'Digite um telefone válido')
+            return false
+        }
+
+        if(!email){
+            alert('Erro', 'Digite seu email')
+            return false
+        }
+
+        else if((/\S+@\S+\.\S+/).test(email) === false){
+            alert('Erro', 'Digite um email válido')
+            return false
+        }
+
+        if(!senha){
+            alert('Erro', 'Digite sua senha')
+            return false
+        }
+        else if (senha.length < 5){
+            alert('Erro', 'A senha deve ter no mínimo 5 caracteres')
+            return false
+        }
+
+        return true
     }
 
     return (
@@ -36,11 +104,11 @@ const Cadastrar = ({navigation}) => {
                 <View style={styles.inputs}>
                     <ImagePerfil foto={foto} setFoto={setFoto}/>
                     <Input placeholder='Nome' value={nome} onChange={setNome}/>
-                    <Input placeholder='Telefone' value={telefone} onChange={setTelefone} keyboard="numeric"/>
+                    <InputMask value={telefone} onChange={setTelefone} mask="telefone"/>
                     <Input placeholder='Email' value={email} onChange={setEmail} keyboard="email-address"/>
                     <Input placeholder='Senha' password value={senha} onChange={setSenha}/>
                     <Select value={tipo} setValue={setTipo} options={options}/>
-                    <Button text="Cadastrar" onPress={cadastrar}/>
+                    <Button text="Cadastrar" onPress={handleCadastrar}/>
                 </View>
             </Content>
         </Container>

@@ -9,8 +9,8 @@ function Routes() {
     return (
         <NavigationContainer>
             {
-                /*user ? <LogadoRoutes /> : <DeslogadoRoutes/>*/
-                // <LogadoRoutes />
+                user ?
+                <LogadoRoutes/> :
                 <DeslogadoRoutes/>
             }
         </NavigationContainer>

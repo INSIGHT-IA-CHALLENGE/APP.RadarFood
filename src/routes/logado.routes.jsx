@@ -12,7 +12,7 @@ const Tab = createBottomTabNavigator();
 const LogadoRoutes = () => {
     return (
         <Tab.Navigator
-            initialRouteName='Alimentos'
+            initialRouteName='Endereços'
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
@@ -68,7 +68,6 @@ function getStyles(focused) {
             borderTopRightRadius: 10,
             height: 60,
             borderTopColor: theme.colors.secondary,
-            position: 'absolute',
         },
 
         tab: {

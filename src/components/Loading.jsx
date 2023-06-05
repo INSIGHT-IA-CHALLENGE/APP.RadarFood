@@ -4,7 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../styles/theme';
 
-export default function Loading({isError}) {
+export default function Loading({ isError }) {
 
     const [rotate] = useState(new Animated.Value(0));
     const [deg] = useState(rotate.interpolate({ inputRange: [0, 360], outputRange: ['0deg', '360deg'] }))
@@ -16,24 +16,23 @@ export default function Loading({isError}) {
             isInteraction: false,
             easing: Easing.linear,
             useNativeDriver: Platform.OS === 'web' ? false : true,
-            
-        }), { iterations: -1}
+
+        }), { iterations: -1 }
     ).start();
 
     return (
-        !isError 
-        ?
-        <View style={styles.container}>
-            <Animated.View style={{ transform: [{ rotate: deg }] }}>
-                <AntDesign name="loading1" style={styles.icon} />
-            </Animated.View>
-            <Text style={styles.text}>Carregando...</Text>
-        </View>
-        :
-        <View style={styles.container}>
-            <MaterialIcons name="dangerous" style={styles.icon} />
-            <Text style={styles.text}>Ocorreu um erro</Text>
-        </View>
+        !isError ?
+            <View style={styles.container}>
+                <Animated.View style={{ transform: [{ rotate: deg }] }}>
+                    <AntDesign name="loading1" style={styles.icon} />
+                </Animated.View>
+                <Text style={styles.text}>Carregando...</Text>
+            </View>
+            :
+            <View style={styles.container}>
+                <MaterialIcons name="dangerous" style={styles.icon} />
+                <Text style={styles.text}>Ocorreu um erro</Text>
+            </View>
     );
 }
 

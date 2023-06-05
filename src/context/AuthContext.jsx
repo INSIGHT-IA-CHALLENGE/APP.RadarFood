@@ -6,6 +6,7 @@ import React, {
     useEffect
 } from "react";
 import { Alert } from "react-native";
+import alert from "../components/Alert";
 
 export const AuthContext = createContext({
     user: null,
@@ -34,7 +35,7 @@ export const AuthProvider = ({ children }) => {
             setUser(user);
         } catch (error) {
             setUser(null);
-            Alert.alert('Erro', 'Erro ao efetuar login')
+            alert('Erro', 'Erro ao efetuar login')
         }
     }
 
@@ -43,7 +44,7 @@ export const AuthProvider = ({ children }) => {
             await AsyncStorage.removeItem('@user');
             setUser(null);
         } catch (error) {
-            Alert.alert('Erro', 'Erro ao efetuar logout')
+            alert('Erro', 'Erro ao efetuar logout')
         }
     }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import Loading from "../../components/Loading";
 import env from '../../../env.json'
@@ -8,6 +8,10 @@ import Button from "../../components/Button";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from '@expo/vector-icons';
 import { theme } from "../../styles/theme";
+import { detalhes } from "../../api/usuario";
+import { useAuth } from "../../context/AuthContext";
+import { useIsFocused } from "@react-navigation/native";
+import alert from "../../components/Alert";
 
 const Conta = () => {
     const [erro, setErro] = useState(false)
@@ -22,67 +26,85 @@ const Conta = () => {
         foto: ""
     })
 
-    useEffect(() => {
-        fetch(`${env.URL_API}/usuario/1`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer `
-            }
+    const auth = useAuth()
+    const isFocused = useIsFocused();
 
-        }).then(async (response) => {
-            let json = await response.json()
+    const fetchUsuario = useCallback(async () => {
+        const response = await detalhes(auth.user)
+        if (response.ok) {
+            const json = await response.json()
             setUsuario(json)
-
-        }).catch((error) => {
+        }
+        else {
             setErro(true)
-            console.log(error)
-        })
-    }, [])
+        }
+    })
+
+    useEffect(() => {
+        fetchUsuario()
+    }, [isFocused])
+
+    const handleLogout = () => {
+        alert('Deslogar', 'Deseja realmente sair?', [
+            {
+                text: 'Confirmar',
+                onPress: () => auth.logout(),
+                style: 'cancel',
+            },
+            {
+                text: 'Cancelar',
+                onPress: () => { },
+                style: 'cancel',
+            },
+        ])
+    }
 
     return (
 
-        usuario.id === 0 ?
-            <Loading isError={erro} /> :
+        <Container>
+            <Content>
+                {
+                    usuario.id === 0 ?
+                        <Loading isError={erro} /> :
+                        <>
+                            <View style={styles.head}>
+                                <Image source={{ uri: usuario?.foto }} style={styles.icon} />
+                                <Text style={styles.name}>{usuario?.nome}</Text>
+                                <Text style={styles.contato}>{usuario?.email}</Text>
+                                <Text style={styles.contato}>{usuario?.telefone}</Text>
+                            </View>
 
-            <Container>
-                <Content>
-                    <View style={styles.head}>
-                        <Image source={{ uri: usuario?.foto }} style={styles.icon} />
-                        <Text style={styles.name}>{usuario?.nome}</Text>
-                        <Text style={styles.contato}>{usuario?.email}</Text>
-                        <Text style={styles.contato}>{usuario?.telefone}</Text>
-                    </View>
+                            <View style={styles.infos}>
+                                <View style={styles.infosContent}>
 
-                    <View style={styles.infos}>
-                        <View style={styles.infosContent}>
+                                    <Text style={styles.infosTitle}>Objetivo</Text>
+                                    <Text style={styles.infosItem}>
+                                        {
+                                            usuario?.tipoUsuario === "R"
+                                                ? 'Receber alimentos'
+                                                : 'Fornecer alimentos'
+                                        }
+                                    </Text>
+                                </View>
+                            </View>
+                        </>
+                }
 
-                            <Text style={styles.infosTitle}>Objetivo</Text>
-                            <Text style={styles.infosItem}>
-                                {
-                                    usuario?.tipoUsuario === "R"
-                                        ? 'Receber alimentos'
-                                        : 'Fornecer alimentos'
-                                }
-                            </Text>
-                        </View>
-                    </View>
+                <View style={styles.buttons}>
+                    <Button text="Sair" variation="transparent" onPress={handleLogout}>
+                        <AntDesign name="logout" size={20} />
+                    </Button>
 
-                    <View style={styles.buttons}>
-                        <Button text="Sair" variation="transparent" onPress={() => { }}>
-                            <AntDesign name="logout" size={20} />
-                        </Button>
+                    <Button text="Editar" variation="transparent" onPress={() => { }}>
+                        <Feather name="edit" size={20} />
+                    </Button>
 
-                        <Button text="Editar" variation="transparent" onPress={() => { }}>
-                            <Feather name="edit" size={20} />
-                        </Button>
-
-                        <Button text="Deletar Conta" variation="danger" onPress={() => { }}>
-                            <Feather name="trash" size={20} />
-                        </Button>
-                    </View>
-                </Content>
-            </Container>
+                    <Button text="Deletar Conta" variation="danger" onPress={() => { }}>
+                        <Feather name="trash" size={20} />
+                    </Button>
+                </View>
+            </Content>
+        </Container>
 
     );
 }

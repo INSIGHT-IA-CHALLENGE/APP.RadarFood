@@ -8,18 +8,18 @@ import { theme } from '../styles/theme'
 //     children?: React.ReactNode
 // }
 
-export default function Input(props) {
+export default function Input({placeholder, password, children, value, onChange, keyboard, style}) {
   return (
     <TextInput 
-        style={styles.input}
-        placeholder={props.placeholder}
-        placeholderTextColor="#555"
-        secureTextEntry={props.password ?? false}
-        value = {props.value}
-        onChangeText={props.onChange}
-        keyboardType={props.keyboard ?? 'default'}
+        style={[styles.input, style]}
+        placeholder={placeholder}
+        secureTextEntry={password ?? false}
+        value = {value}
+        onChangeText={onChange}
+        keyboardType={keyboard ?? 'default'}
+        placeholderTextColor={theme.colors.gray}
     >
-        {props.children}
+        {children}
     </TextInput>
   )
 }
@@ -32,6 +32,6 @@ const styles = StyleSheet.create({
         fontFamily: theme.fonts.roboto.regular,
         fontSize: 16,
         color: theme.colors.black,
-        width: '100%'
+        width: '100%',
     }
 })
