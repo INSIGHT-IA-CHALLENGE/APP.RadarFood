@@ -5,18 +5,23 @@ import AddButton from "../../components/AddButton";
 import Input from "../../components/Input";
 import { useCallback, useEffect, useState } from "react";
 import list from "../../styles/list";
-import { listar } from "../../api/endereco";
+import { deletar, listar } from "../../api/endereco";
 import { useAuth } from "../../context/AuthContext";
 import { Feather } from "@expo/vector-icons";
 import Loading from "../../components/Loading";
+import Pagination from "../../components/Pagination";
+import alert from "../../components/Alert";
+import { useNavigation } from "@react-navigation/native";
 
 const Enderecos = () => {
 
     const [erro, setErro] = useState(false)
+    const [atualizar, setAtualizar] = useState(false)
     const [pesquisa, setPesquisa] = useState('')
     const [enderecos, setEnderecos] = useState(null)
     const [page, setPage] = useState({ number: 0, totalPages: 0 })
     const auth = useAuth()
+    const navigation = useNavigation()
 
     const fetchEnderecos = useCallback(async () => {
 
@@ -32,18 +37,67 @@ const Enderecos = () => {
         }
     })
 
-    useEffect(() => {
-        setEnderecos(null)
+    const handlePesquisa = (pesquisa) => {
         setPage({ number: 0, totalPages: 0 })
+        setPesquisa(pesquisa)
+        setEnderecos(null)
+        setAtualizar(!atualizar)
+    }
+
+    const handleAnterior = () => {
+        setPage({ ...page, number: page.number - 1 })
+        setEnderecos(null)
+        setAtualizar(!atualizar)
+    }
+
+    const handleProximo = () => {
+        setPage({ ...page, number: page.number + 1 })
+        setEnderecos(null)
+        setAtualizar(!atualizar)
+    }
+
+    const handleDelete = async (id) => {
+        alert("Remover endereço", "Deseja realmente remover este endereço?", [
+            {
+                text: "Confirmar",
+                style: "default",
+                onPress: () => apagarEndereco(id)
+            },
+            {
+                text: "Cancelar",
+                onPress: () => { },
+                style: "cancel"
+            }
+        ])
+    }
+
+    const apagarEndereco = async (id) => {
+
+        const response = await deletar(auth.user, id)
+
+        if (response.ok) {
+            alert('Sucesso', 'Endereço deletado com sucesso!')
+            setEnderecos(null)
+            setPage({ number: 0, totalPages: 0 })
+            setPesquisa('')
+            setAtualizar(!atualizar)
+        }
+        else {
+            alert('Erro', 'Erro ao deletar endereço!')
+        }
+    }
+
+    useEffect(() => {
         fetchEnderecos()
-    }, [pesquisa])
+    }, [atualizar])
+
 
     return (
         <Container>
             <Content>
                 <View style={styles.header}>
-                    <Input placeholder='Pesquisar' style={{ maxWidth: '80%' }} value={pesquisa} onChange={setPesquisa} />
-                    <AddButton />
+                    <Input placeholder='Pesquisar' style={{ maxWidth: '80%' }} value={pesquisa} onChange={e => handlePesquisa(e)} />
+                    <AddButton onPress={() => navigation.navigate('AddEditEndereco', { endereco: null })} />
                 </View>
 
                 {
@@ -63,7 +117,8 @@ const Enderecos = () => {
                                         </View>
 
                                         <View style={list.icons}>
-                                            <Feather name="trash" style={list.delete} />
+                                            <Feather name="edit" style={list.edit} onPress={() => navigation.navigate("AddEditEndereco", {endereco: endereco})} />
+                                            <Feather name="trash" style={list.delete} onPress={() => handleDelete(endereco?.id)} />
                                         </View>
                                     </View>
                                 ))
@@ -73,9 +128,12 @@ const Enderecos = () => {
 
             </Content>
 
-            <Pressable style={styles.test}>
-                <Text>Endereço 1</Text>
-            </Pressable>
+            <Pagination
+                number={page.number}
+                totalPages={page.totalPages}
+                handleAnterior={handleAnterior}
+                handleProximo={handleProximo}
+            />
         </Container>
     );
 }
@@ -90,13 +148,6 @@ const styles = StyleSheet.create({
         gap: 10,
         marginBottom: 10,
     },
-
-    test: {
-        backgroundColor: 'blue',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-    }
 })
 
 export default Enderecos;

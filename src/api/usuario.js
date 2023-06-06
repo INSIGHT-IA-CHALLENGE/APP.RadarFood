@@ -40,3 +40,18 @@ export async function detalhes(user) {
 
     return response
 }
+
+export async function deletar(user, id) {
+
+    const { token, prefix } = user
+
+    const response = await fetch(`${env.BASE_URL}/usuario/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `${prefix} ${token}`
+        }
+    })
+
+    return response
+}

@@ -1,38 +1,60 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, Text, View } from "react-native";
 import { theme } from "../styles/theme";
-import Enderecos from "../screens/Enderecos/Enderecos";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import Alimentos from "../screens/Alimentos/Alimentos";
 import Conta from "../screens/Conta/Conta";
+import EnderecoRoutes from "./enderecos.routes";
+import { useCallback, useEffect, useState } from "react";
+import { detalhes } from "../api/usuario";
+import { useAuth } from "../context/AuthContext";
 
 const Tab = createBottomTabNavigator();
 
 const LogadoRoutes = () => {
+    const [tipoUsuario, setTipoUsuario] = useState('')
+    const auth = useAuth()
+
+    const fetchUsuario = useCallback(async () => {
+        const response = await detalhes(auth.user)
+        if (response.ok) {
+            const json = await response.json()
+            setTipoUsuario(json.tipoUsuario)
+        }
+    })
+
+    useEffect(() => {
+        fetchUsuario()
+    }, [])
+
     return (
         <Tab.Navigator
-            initialRouteName='Endereços'
+            initialRouteName='TabConta'
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: [getStyles(false).container, getStyles(false).shadow],
             }}
         >
-            <Tab.Screen
-                name="Endereços"
-                component={Enderecos}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View style={[getStyles(focused).tab]}>
-                            <MaterialCommunityIcons name="home-city" style={getStyles(focused).tabIcon} />
-                            <Text style={getStyles(focused).tabText}>Endereços</Text>
-                        </View>
-                    )
-                }} />
+            {
+                tipoUsuario === 'F' &&
+                <Tab.Screen
+                    name="TabEndereços"
+                    component={EnderecoRoutes}
+                    options={{
+                        tabBarIcon: ({ focused }) => (
+                            <View style={[getStyles(focused).tab]}>
+                                <MaterialCommunityIcons name="home-city" style={getStyles(focused).tabIcon} />
+                                <Text style={getStyles(focused).tabText}>Endereços</Text>
+                            </View>
+                        )
+                    }}
+                />
+            }
 
             <Tab.Screen
-                name="Alimentos"
+                name="TabAlimentos"
                 component={Alimentos}
                 options={{
                     tabBarIcon: ({ focused }) => (
@@ -43,7 +65,7 @@ const LogadoRoutes = () => {
                 }} />
 
             <Tab.Screen
-                name="Conta"
+                name="TabConta"
                 component={Conta}
                 options={{
                     tabBarIcon: ({ focused }) => (

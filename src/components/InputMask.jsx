@@ -16,6 +16,13 @@ const InputMask = (props) => {
                 placeholder: 'Telefone',
             }
         }
+
+        if (mask === 'cep') {
+            return {
+                type: 'zip-code',
+                placeholder: 'CEP',
+            }
+        }
     }
 
     return (

@@ -1,16 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import Loading from "../../components/Loading";
-import env from '../../../env.json'
 import Container from "../../components/Container";
 import Content from "../../components/Content";
 import Button from "../../components/Button";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from '@expo/vector-icons';
 import { theme } from "../../styles/theme";
-import { detalhes } from "../../api/usuario";
+import { deletar, detalhes } from "../../api/usuario";
 import { useAuth } from "../../context/AuthContext";
-import { useIsFocused } from "@react-navigation/native";
 import alert from "../../components/Alert";
 
 const Conta = () => {
@@ -27,7 +25,6 @@ const Conta = () => {
     })
 
     const auth = useAuth()
-    const isFocused = useIsFocused();
 
     const fetchUsuario = useCallback(async () => {
         const response = await detalhes(auth.user)
@@ -42,14 +39,14 @@ const Conta = () => {
 
     useEffect(() => {
         fetchUsuario()
-    }, [isFocused])
+    }, [])
 
     const handleLogout = () => {
         alert('Deslogar', 'Deseja realmente sair?', [
             {
                 text: 'Confirmar',
                 onPress: () => auth.logout(),
-                style: 'cancel',
+                style: 'default',
             },
             {
                 text: 'Cancelar',
@@ -57,6 +54,33 @@ const Conta = () => {
                 style: 'cancel',
             },
         ])
+    }
+
+    const handleDelete = (id) => {
+        alert('Apagar conta', 'Deseja realmente apagar sua conta?', [
+            {
+                text: 'Confirmar',
+                onPress: () => apagarConta(id),
+                style: 'default',
+            },
+            {
+                text: 'Cancelar',
+                onPress: () => { },
+                style: 'cancel',
+            },
+        ])
+    }
+
+    const apagarConta = async (id) => {
+        const response = await deletar(auth.user, id)
+
+        if (response.ok) {
+            alert('Sucesso', 'Conta apagada com sucesso')
+            auth.logout()
+        }
+        else {
+            alert('Erro', 'Erro ao apagar conta')
+        }
     }
 
     return (
@@ -99,7 +123,11 @@ const Conta = () => {
                         <Feather name="edit" size={20} />
                     </Button>
 
-                    <Button text="Deletar Conta" variation="danger" onPress={() => { }}>
+                    <Button
+                        text="Deletar Conta"
+                        variation="danger"
+                        onPress={usuario?.id !== 0 ? () => handleDelete(usuario?.id) : () => {}}
+                    >
                         <Feather name="trash" size={20} />
                     </Button>
                 </View>

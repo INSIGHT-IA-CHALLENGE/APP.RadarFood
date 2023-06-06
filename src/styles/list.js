@@ -42,11 +42,17 @@ const list = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        gap: 5,
     },
 
     delete:{
         fontSize: 20,
         color: theme.colors.danger,
+    },
+
+    edit:{
+        fontSize: 20,
+        color: theme.colors.warning,
     }
 })
 

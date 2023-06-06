@@ -8,16 +8,18 @@ import { theme } from '../styles/theme'
 //     children?: React.ReactNode
 // }
 
-export default function Input({placeholder, password, children, value, onChange, keyboard, style}) {
+export default function Input({placeholder, password, children, value, onChange, keyboard, style, defaultValue, disabled}) {
   return (
     <TextInput 
-        style={[styles.input, style]}
+        style={[styles.input, style, {opacity: disabled ? 0.5 : 1}]}
         placeholder={placeholder}
         secureTextEntry={password ?? false}
         value = {value}
         onChangeText={onChange}
         keyboardType={keyboard ?? 'default'}
         placeholderTextColor={theme.colors.gray}
+        defaultValue={defaultValue}
+        editable={!disabled}
     >
         {children}
     </TextInput>
