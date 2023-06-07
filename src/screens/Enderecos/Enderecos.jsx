@@ -1,4 +1,4 @@
-import { Button, Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Container from "../../components/Container";
 import Content from "../../components/Content";
 import AddButton from "../../components/AddButton";
@@ -15,17 +15,17 @@ import { useNavigation } from "@react-navigation/native";
 
 const Enderecos = () => {
 
+    const auth = useAuth()
+    const navigation = useNavigation()
     const [erro, setErro] = useState(false)
     const [atualizar, setAtualizar] = useState(false)
     const [pesquisa, setPesquisa] = useState('')
     const [enderecos, setEnderecos] = useState(null)
     const [page, setPage] = useState({ number: 0, totalPages: 0 })
-    const auth = useAuth()
-    const navigation = useNavigation()
 
     const fetchEnderecos = useCallback(async () => {
 
-        const reponse = await listar(auth.user, pesquisa, page.number)
+        const reponse = await listar(auth.token, pesquisa, page.number)
 
         if (reponse.ok) {
             const json = await reponse.json()
@@ -73,7 +73,7 @@ const Enderecos = () => {
 
     const apagarEndereco = async (id) => {
 
-        const response = await deletar(auth.user, id)
+        const response = await deletar(auth.token, id)
 
         if (response.ok) {
             alert('Sucesso', 'Endereço deletado com sucesso!')
@@ -107,7 +107,7 @@ const Enderecos = () => {
                             {
                                 enderecos.map(endereco => (
                                     <View style={list.item} key={endereco?.id}>
-                                        <View style={list.itemContent}>
+                                        <View>
                                             <Text numberOfLines={1} ellipsizeMode="middle" style={list.itemTitle}>
                                                 {endereco?.logradouro}, {endereco?.numero}
                                             </Text>

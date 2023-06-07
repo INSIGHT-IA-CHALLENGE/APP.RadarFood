@@ -4,12 +4,12 @@ import { useAuth } from '../context/AuthContext';
 import LogadoRoutes from './logado.routes';
 
 function Routes() {
-    const { user } = useAuth();
+    const { token } = useAuth();
 
     return (
         <NavigationContainer>
             {
-                user ?
+                token ?
                 <LogadoRoutes/> :
                 <DeslogadoRoutes/>
             }

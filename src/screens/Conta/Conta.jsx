@@ -17,30 +17,12 @@ const Conta = () => {
     const isFocus = useIsFocused()
     const navigation = useNavigation()
     const [erro, setErro] = useState(false)
-    const [usuario, setUsuario] = useState({
-        id: 0,
-        nome: "",
-        email: "",
-        senha: "",
-        telefone: "",
-        tipoUsuario: "",
-        ativo: true,
-        foto: ""
-    })
-
-    const fetchUsuario = useCallback(async () => {
-        const response = await detalhes(auth.user)
-        if (response.ok) {
-            const json = await response.json()
-            setUsuario(json)
-        }
-        else {
-            setErro(true)
-        }
-    })
 
     useEffect(() => {
-        fetchUsuario()
+        if(!auth.user)
+            setErro(true)
+        else
+            setErro(false)
     }, [isFocus])
 
     const handleLogout = () => {
@@ -74,7 +56,7 @@ const Conta = () => {
     }
 
     const apagarConta = async (id) => {
-        const response = await deletar(auth.user, id)
+        const response = await deletar(auth.token, id)
 
         if (response.ok) {
             alert('Sucesso', 'Conta apagada com sucesso')
@@ -90,14 +72,14 @@ const Conta = () => {
         <Container>
             <Content>
                 {
-                    usuario.id === 0 ?
+                    auth?.user?.id === 0 ?
                         <Loading isError={erro} /> :
                         <>
                             <View style={styles.head}>
-                                <Image source={{ uri: usuario?.foto }} style={styles.icon} />
-                                <Text style={styles.name}>{usuario?.nome}</Text>
-                                <Text style={styles.contato}>{usuario?.email}</Text>
-                                <Text style={styles.contato}>{usuario?.telefone}</Text>
+                                <Image source={{ uri: auth.user?.foto }} style={styles.icon} />
+                                <Text style={styles.name}>{auth.user?.nome}</Text>
+                                <Text style={styles.contato}>{auth.user?.email}</Text>
+                                <Text style={styles.contato}>{auth.user?.telefone}</Text>
                             </View>
 
                             <View style={styles.infos}>
@@ -106,7 +88,7 @@ const Conta = () => {
                                     <Text style={styles.infosTitle}>Objetivo</Text>
                                     <Text style={styles.infosItem}>
                                         {
-                                            usuario?.tipoUsuario === "R"
+                                            auth.user?.tipoUsuario === "R"
                                                 ? 'Receber alimentos'
                                                 : 'Fornecer alimentos'
                                         }
@@ -124,8 +106,8 @@ const Conta = () => {
                     <Button
                         text="Editar"
                         variation="transparent"
-                        onPress={usuario?.id !== 0
-                            ? () => navigation.navigate('AddEditConta', { conta: usuario })
+                        onPress={auth.user?.id !== 0
+                            ? () => navigation.navigate('AddEditConta')
                             : () => { }
                         }
                     >
@@ -135,8 +117,8 @@ const Conta = () => {
                     <Button
                         text="Deletar Conta"
                         variation="danger"
-                        onPress={usuario?.id !== 0
-                            ? () => handleDelete(usuario?.id)
+                        onPress={auth.user?.id !== 0
+                            ? () => handleDelete(auth.user?.id)
                             : () => { }
                         }
                     >

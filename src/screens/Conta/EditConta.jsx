@@ -13,40 +13,38 @@ import Select from "../../components/Select";
 import { atualizar } from "../../api/usuario";
 import alert from "../../components/Alert";
 
-const EditConta = ({ navigation, route }) => {
+const EditConta = ({ navigation }) => {
 
     const auth = useAuth()
-    const { conta } = route.params
 
     const options = [{ text: 'Desejo receber alimentos', value: 'R' }, { text: 'Desejo fornecer alimentos', value: 'F' }]
-    const [foto, setFoto] = useState(conta?.foto || '')
-    const [nome, setNome] = useState(conta?.nome || '')
-    const [telefone, setTelefone] = useState(conta?.telefone || '')
-    const [email, setEmail] = useState(conta?.email || '')
+    const [foto, setFoto] = useState(auth.user.foto || '')
+    const [nome, setNome] = useState(auth.user.nome || '')
+    const [telefone, setTelefone] = useState(auth.user.telefone || '')
+    const [email, setEmail] = useState(auth.user.email || '')
     const [senha, setSenha] = useState('')
-    const [tipo, setTipo] = useState(conta?.tipoUsuario || 'R')
+    const [tipo, setTipo] = useState(auth.user.tipoUsuario || 'R')
 
 
     const handleEditar = async () => {
-        console.log(conta)
         
         if (validaCampos()) {
             const data = {
-                id: conta.id,
+                id: auth.user.id,
                 foto,
                 nome,
                 telefone,
                 email,
-                senha: senha.length >= 5 ? senha : conta.password,
+                senha: senha.length >= 5 ? senha : auth.user.password,
                 tipoUsuario: tipo,
                 ativo: true
             }
             
-            console.log(data)
 
-            const response = await atualizar(auth.user, data);
+            const response = await atualizar(auth.token, data);
 
             if (response.ok) {
+                auth.fetchUsuario()
                 alert('Sucesso', 'Cadastro alterado com sucesso')
                 navigation.navigate('Conta')
             }

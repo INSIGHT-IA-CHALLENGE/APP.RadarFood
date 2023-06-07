@@ -3,53 +3,82 @@ import React, {
     useState,
     createContext,
     useContext,
-    useEffect
+    useEffect,
+    useCallback
 } from "react";
-import { Alert } from "react-native";
 import alert from "../components/Alert";
+import { detalhes } from "../api/usuario";
 
 export const AuthContext = createContext({
-    user: null,
+    token: null,
     login: () => { },
-    logout: () => { }
+    logout: () => { },
+    user: null,
+    fetchUsuario: () => { }
 });
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null);
+    const [user, setUser] = useState({
+        id: 0,
+        nome: "",
+        email: "",
+        senha: "",
+        telefone: "",
+        tipoUsuario: "",
+        ativo: true,
+        foto: ""
+    });
+
 
     useEffect(() => {
         async function getUser() {
-            const user = await AsyncStorage.getItem('@user');
-            if (user)
-                setUser(JSON.parse(user));
+            let token = await AsyncStorage.getItem('@token');
+            if (token)
+                setToken(JSON.parse(token));
             else
-                setUser(null);
+                setToken(null);
         }
 
-        getUser();
+        getUser()
+
     }, []);
 
-    async function login(user) {
+    useEffect(() => {
+        if (token) {
+            fetchUsuario()
+        }
+    }, [token])
+
+    const fetchUsuario = useCallback(async () => {
+        const response = await detalhes(token)
+        if (response.ok) {
+            const json = await response.json()
+            setUser(json)
+        }
+    })
+
+    async function login(token) {
         try {
-            await AsyncStorage.setItem('@user', JSON.stringify(user));
-            setUser(user);
+            await AsyncStorage.setItem('@token', JSON.stringify(token));
+            setToken(token);
         } catch (error) {
-            setUser(null);
+            setToken(null);
             alert('Erro', 'Erro ao efetuar login')
         }
     }
 
     async function logout() {
         try {
-            await AsyncStorage.removeItem('@user');
-            setUser(null);
+            await AsyncStorage.removeItem('@token');
+            setToken(null);
         } catch (error) {
             alert('Erro', 'Erro ao efetuar logout')
         }
     }
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ token, login, logout, user, fetchUsuario }}>
             {children}
         </AuthContext.Provider>
     );

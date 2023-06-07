@@ -5,32 +5,18 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import Alimentos from "../screens/Alimentos/Alimentos";
 import EnderecoRoutes from "./enderecos.routes";
-import { useCallback, useEffect, useState } from "react";
-import { detalhes } from "../api/usuario";
 import { useAuth } from "../context/AuthContext";
 import ContaRoutes from "./conta.routes";
 
 const Tab = createBottomTabNavigator();
 
 const LogadoRoutes = () => {
-    const [tipoUsuario, setTipoUsuario] = useState('')
+    
     const auth = useAuth()
-
-    const fetchUsuario = useCallback(async () => {
-        const response = await detalhes(auth.user)
-        if (response.ok) {
-            const json = await response.json()
-            setTipoUsuario(json.tipoUsuario)
-        }
-    })
-
-    useEffect(() => {
-        fetchUsuario()
-    }, [])
 
     return (
         <Tab.Navigator
-            initialRouteName='TabConta'
+            initialRouteName='TabAlimentos'
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
@@ -38,7 +24,7 @@ const LogadoRoutes = () => {
             }}
         >
             {
-                tipoUsuario === 'F' &&
+                auth?.user?.tipoUsuario === 'F' &&
                 <Tab.Screen
                     name="TabEndereços"
                     component={EnderecoRoutes}
@@ -64,7 +50,6 @@ const LogadoRoutes = () => {
                     )
 
                 }}
-                initialParams={{ tipoUsuario }}
             />
 
             <Tab.Screen

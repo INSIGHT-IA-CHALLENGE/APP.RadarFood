@@ -62,7 +62,7 @@ const AddEditEndereco = ({ navigation, route }) => {
                 ativo: true
             }
 
-            const response = await cadastrar(auth.user, data)
+            const response = await cadastrar(auth.token, data)
 
             if (response.ok) {
                 alert('Sucesso', 'Endereço cadastrado com sucesso')
@@ -88,7 +88,7 @@ const AddEditEndereco = ({ navigation, route }) => {
                 usuario: {}
             }
 
-            const response = await alterar(auth.user, data, endereco.id)
+            const response = await alterar(auth.token, data, endereco.id)
 
             if (response.ok) {
                 alert('Sucesso', 'Endereço alterado com sucesso')

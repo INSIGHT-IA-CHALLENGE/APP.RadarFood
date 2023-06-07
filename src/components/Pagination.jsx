@@ -16,9 +16,9 @@ const Pagination = ({number, totalPages, handleAnterior, handleProximo}) => {
             </TouchableOpacity>
             
             <TouchableOpacity
-                style={[styles.button, {opacity: number === totalPages - 1 ? 0.5 : 1}]}
+                style={[styles.button, {opacity: number === totalPages - 1 || totalPages === 0 ? 0.5 : 1}]}
                 activeOpacity={0.8}
-                disabled={number === totalPages - 1}
+                disabled={number === totalPages - 1 || totalPages === 0 }
                 onPress={handleProximo}
             >
                 <Text style={styles.text}>Próximo</Text>
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 10,
         paddingHorizontal: 20,
+        backgroundColor: theme.colors.lightGray,
     },
 
     button: {

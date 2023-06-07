@@ -20,9 +20,20 @@ const list = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
+        alignItems: "center",
     },
 
     itemContent:{
+        display: "flex",
+        flexDirection: "row",
+        gap: 8,
+    },
+
+    itemImagem:{
+        width: 75,
+        height: 75,
+        borderRadius: 5,
+        resizeMode: "cover"
     },
 
     itemTitle:{
@@ -35,6 +46,14 @@ const list = StyleSheet.create({
         fontSize: 14,
         fontFamily: theme.fonts.roboto.regular,
         color: theme.colors.gray,
+    },
+
+    itemBagde:{
+        fontFamily: theme.fonts.roboto.black,
+        color: theme.colors.success,
+        width: '80%',
+        padding: 2,
+        borderRadius: 50,
     },
 
     icons:{
