@@ -7,7 +7,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 const ImagePerfil = (props) => {
     
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -17,14 +16,14 @@ const ImagePerfil = (props) => {
         });
 
         if (!result.canceled) {
-            props.setFoto(result.assets[0].base64);
+            props.setFoto('data:image/jpeg;base64,' + result.assets[0].base64);
         }
     };
 
     return (
         <View style={styles.container}>
             <Image
-                source={props.foto ? { uri: 'data:image/jpeg;base64,' + props.foto } : GalleryImage}
+                source={props.foto ? { uri: props.foto } : GalleryImage}
                 style={[styles.foto]}
             />
 

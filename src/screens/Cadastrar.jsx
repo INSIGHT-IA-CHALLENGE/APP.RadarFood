@@ -10,6 +10,7 @@ import Select from "../components/Select";
 import alert from "../components/Alert";
 import InputMask from "../components/InputMask";
 import { cadastrar } from "../api/usuario";
+import { theme } from "../styles/theme";
 
 const Cadastrar = ({navigation}) => {
 
@@ -118,8 +119,8 @@ const Cadastrar = ({navigation}) => {
 const styles = StyleSheet.create({
 
     title: {
-        fontFamily: 'Montserrat-Black',
-        color: '#FFF',
+        fontFamily: theme.fonts.montserrat.black,
+        color: theme.colors.white,
         fontSize: 30,
         textAlign: 'center',
         marginBottom: 30

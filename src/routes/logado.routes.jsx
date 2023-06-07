@@ -4,11 +4,11 @@ import { theme } from "../styles/theme";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import Alimentos from "../screens/Alimentos/Alimentos";
-import Conta from "../screens/Conta/Conta";
 import EnderecoRoutes from "./enderecos.routes";
 import { useCallback, useEffect, useState } from "react";
 import { detalhes } from "../api/usuario";
 import { useAuth } from "../context/AuthContext";
+import ContaRoutes from "./conta.routes";
 
 const Tab = createBottomTabNavigator();
 
@@ -62,11 +62,14 @@ const LogadoRoutes = () => {
                             <Ionicons name="fast-food" style={getStyles(focused).tabButtonIcon} />
                         </View>
                     )
-                }} />
+
+                }}
+                initialParams={{ tipoUsuario }}
+            />
 
             <Tab.Screen
                 name="TabConta"
-                component={Conta}
+                component={ContaRoutes}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={getStyles(focused).tab}>

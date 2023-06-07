@@ -10,8 +10,12 @@ import { theme } from "../../styles/theme";
 import { deletar, detalhes } from "../../api/usuario";
 import { useAuth } from "../../context/AuthContext";
 import alert from "../../components/Alert";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 const Conta = () => {
+    const auth = useAuth()
+    const isFocus = useIsFocused()
+    const navigation = useNavigation()
     const [erro, setErro] = useState(false)
     const [usuario, setUsuario] = useState({
         id: 0,
@@ -23,8 +27,6 @@ const Conta = () => {
         ativo: true,
         foto: ""
     })
-
-    const auth = useAuth()
 
     const fetchUsuario = useCallback(async () => {
         const response = await detalhes(auth.user)
@@ -39,7 +41,7 @@ const Conta = () => {
 
     useEffect(() => {
         fetchUsuario()
-    }, [])
+    }, [isFocus])
 
     const handleLogout = () => {
         alert('Deslogar', 'Deseja realmente sair?', [
@@ -119,14 +121,24 @@ const Conta = () => {
                         <AntDesign name="logout" size={20} />
                     </Button>
 
-                    <Button text="Editar" variation="transparent" onPress={() => { }}>
+                    <Button
+                        text="Editar"
+                        variation="transparent"
+                        onPress={usuario?.id !== 0
+                            ? () => navigation.navigate('AddEditConta', { conta: usuario })
+                            : () => { }
+                        }
+                    >
                         <Feather name="edit" size={20} />
                     </Button>
 
                     <Button
                         text="Deletar Conta"
                         variation="danger"
-                        onPress={usuario?.id !== 0 ? () => handleDelete(usuario?.id) : () => {}}
+                        onPress={usuario?.id !== 0
+                            ? () => handleDelete(usuario?.id)
+                            : () => { }
+                        }
                     >
                         <Feather name="trash" size={20} />
                     </Button>

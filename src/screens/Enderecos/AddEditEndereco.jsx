@@ -20,7 +20,7 @@ const AddEditEndereco = ({ navigation, route }) => {
     const [logradouro, setLogradouro] = useState(endereco?.logradouro || '')
     const [bairro, setBairro] = useState(endereco?.bairro || '')
     const [cidade, setCidade] = useState(endereco?.cidade || '')
-    const [uf, setUf] = useState(endereco?.estado || '')
+    const [uf, setUf] = useState(endereco?.uf || '')
     const [complemento, setComplemento] = useState(endereco?.complemento || '')
     const auth = useAuth()
 

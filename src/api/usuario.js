@@ -55,3 +55,19 @@ export async function deletar(user, id) {
 
     return response
 }
+
+export async function atualizar(user, usuario) {
+    
+        const { token, prefix } = user
+    
+        const response = await fetch(`${env.BASE_URL}/usuario/${usuario.id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${prefix} ${token}`
+            },
+            body: JSON.stringify(usuario)
+        })
+    
+        return response
+}
