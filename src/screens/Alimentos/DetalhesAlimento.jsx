@@ -20,7 +20,6 @@ const DetalhesAlimento = ({ navigation, route }) => {
 
         if (reponse.ok) {
             const json = await reponse.json()
-            console.log(json)
             setReserva(json)
         }
         else {
@@ -29,7 +28,6 @@ const DetalhesAlimento = ({ navigation, route }) => {
     })
 
     useEffect(() => {
-        console.log(alimento)
         fetchReserva()
     }, [])
 

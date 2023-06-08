@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { theme } from "../styles/theme";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import Alimentos from "../screens/Alimentos/Alimentos";
 import EnderecoRoutes from "./enderecos.routes";
 import { useAuth } from "../context/AuthContext";
@@ -38,6 +39,21 @@ const LogadoRoutes = () => {
                         )
                     }}
                 />
+            }
+            {
+                 auth?.user?.tipoUsuario === 'R' &&
+                 <Tab.Screen
+                     name="TabEndereços"
+                     component={EnderecoRoutes}
+                     options={{
+                         tabBarIcon: ({ focused }) => (
+                             <View style={[getStyles(focused).tab]}>
+                                <AntDesign name="shoppingcart" style={getStyles(focused).tabIcon} />
+                                 <Text style={getStyles(focused).tabText}>Reservas</Text>
+                             </View>
+                         )
+                     }}
+                 />
             }
 
             <Tab.Screen

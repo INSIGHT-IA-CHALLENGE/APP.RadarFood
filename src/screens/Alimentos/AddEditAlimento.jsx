@@ -89,7 +89,6 @@ const AddEditAlimento = ({ navigation, route }) => {
 
     const handleEditar = async () => {
         if (validarCampos()) {
-            console.log(valor)
             const valorFinal = valor ? parseFloat(valor.replace('R$', '').replace('.', '').replace(',', '.')) : 0
 
 
@@ -156,7 +155,6 @@ const AddEditAlimento = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        console.log(alimento)
         fetchEnderecos()
     }, [])
 
