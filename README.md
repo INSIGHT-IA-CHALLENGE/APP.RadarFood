@@ -23,6 +23,7 @@ Projeto React Native:
 Na raiz do entregavel disponibilizamos um arquivo json com todos os endpoints e dados nescessarios para testar a API, o arquivo pode ser importado no Insomnia
 
 # Vídeos
-Pitch: https://www.youtube.com/watch?v=I3kLXMMGGvU&ab_channel=PedroSilva
-Demonstração: https://reccloud.com/pt/u/gbhwg8g
+- Pitch: https://www.youtube.com/watch?v=I3kLXMMGGvU&ab_channel=PedroSilva
+- Demonstração: https://www.youtube.com/watch?v=5Z7GdFIJJg8
+
 Na raiz do projeto também disponibilizamos um arquivo txt com o link do video pitch e o video de demonstração do APP em funcionamento
