@@ -7,6 +7,7 @@ import Alimentos from "../screens/Alimentos/Alimentos";
 import EnderecoRoutes from "./enderecos.routes";
 import { useAuth } from "../context/AuthContext";
 import ContaRoutes from "./conta.routes";
+import AlimentosRoutes from "./alimentos.routes";
 
 const Tab = createBottomTabNavigator();
 
@@ -41,7 +42,7 @@ const LogadoRoutes = () => {
 
             <Tab.Screen
                 name="TabAlimentos"
-                component={Alimentos}
+                component={AlimentosRoutes}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={[getStyles(focused).tabButton]}>

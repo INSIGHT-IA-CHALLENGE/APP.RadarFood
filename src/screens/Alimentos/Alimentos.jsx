@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { listar } from "../../api/alimento";
+import { deletar, listar } from "../../api/alimento";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
@@ -12,6 +12,7 @@ import Input from "../../components/Input";
 import Loading from "../../components/Loading";
 import Pagination from "../../components/Pagination";
 import alert from "../../components/Alert";
+import { AntDesign } from '@expo/vector-icons';
 
 
 const Alimentos = () => {
@@ -57,6 +58,20 @@ const Alimentos = () => {
         setAtualizar(!atualizar)
     }
 
+    const handleDelete = async (id) => {
+
+        const reponse = await deletar(auth.token, id)
+
+        if (reponse.ok) {
+            alert('Sucesso', 'Alimento excluído com sucesso')
+            setAlimentos(null)
+            setAtualizar(!atualizar)
+        }
+        else {
+            alert('Erro', 'Erro ao excluir alimento')
+        }
+    }
+
     useEffect(() => {
         fetchAlimentos()
     }, [atualizar])
@@ -65,8 +80,16 @@ const Alimentos = () => {
         <Container>
             <Content>
                 <View style={styles.header}>
-                    <Input placeholder='Pesquisar' style={{ maxWidth: '80%' }} value={pesquisa} onChange={e => handlePesquisa(e)} />
-                    <AddButton onPress={() => navigation.navigate('AddEditalimento', { alimento: null })} />
+                    <Input
+                        placeholder='Pesquisar'
+                        style={{ maxWidth: auth.user.tipoUsuario === 'F' ? '80%' : '100%' }}
+                        value={pesquisa}
+                        onChange={e => handlePesquisa(e)} />
+
+                    {
+                        auth.user.tipoUsuario === 'F' &&
+                        <AddButton onPress={() => navigation.navigate('AddEditAlimento', { alimento: null })} />
+                    }
                 </View>
 
                 {
@@ -75,7 +98,7 @@ const Alimentos = () => {
                         <View style={list.container}>
                             {
                                 alimentos.map(alimento => (
-                                    <View style={list.item} key={alimento?.id}>
+                                    <View style={list.item} key={alimento?.id} onPres>
                                         <View style={list.itemContent}>
                                             <View>
                                                 <Image source={{ uri: alimento?.foto }} style={list.itemImagem} />
@@ -92,16 +115,27 @@ const Alimentos = () => {
                                                     Validade: {alimento?.dataValidade}
                                                 </Text>
                                                 <Text numberOfLines={1} ellipsizeMode="middle" style={list.itemBagde}>
-                                                    {alimento?.valor ?? 'Doação'}
+                                                    {alimento?.valor ? 'R$' + alimento?.valor.toFixed(2) : 'Doação'}
                                                 </Text>
                                             </View>
                                         </View>
                                         <View style={list.icons}>
-                                            <Feather name="edit" style={list.edit} onPress={() => navigation.navigate("AddEditAlimento", { alimento: alimento })} />
-                                            <Feather name="trash" style={list.delete} onPress={() => handleDelete(alimento?.id)} />
+                                            <AntDesign name="eye" style={list.view} onPress={() => navigation.navigate("DetalhesAlimento", { alimento: alimento })} />
+                                            {
+                                                auth.user.tipoUsuario === 'F' &&
+                                                <>
+                                                    <Feather name="edit" style={list.edit} onPress={() => navigation.navigate("AddEditAlimento", { alimento: alimento })} />
+                                                    <Feather name="trash" style={list.delete} onPress={() => handleDelete(alimento?.id)} />
+                                                </>
+
+                                            }
                                         </View>
                                     </View>
                                 ))
+                            }
+                            {
+                                alimentos?.length === 0
+                                && <Text style={list.empty}>Nenhum alimento encontrado</Text>
                             }
                         </View>
                 }

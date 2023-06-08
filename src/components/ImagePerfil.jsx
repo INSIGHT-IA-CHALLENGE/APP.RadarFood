@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
         borderRadius: 60,
-        backgroundColor: theme.colors.lightGray,
+        backgroundColor: theme.colors.white,
         resizeMode: "cover"
     },
 

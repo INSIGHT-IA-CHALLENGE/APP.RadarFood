@@ -23,6 +23,30 @@ const InputMask = (props) => {
                 placeholder: 'CEP',
             }
         }
+
+        if(mask === 'money'){
+            return {
+                type: 'money',
+                options: {
+                    precision: 2,
+                    separator: ',',
+                    delimiter: '.',
+                    unit: 'R$',
+                    suffixUnit: ''
+                },
+                placeholder: 'Valor (Deixe vazio se for doação)',
+            }
+        }
+
+        if(mask === 'date'){
+            return {
+                type: 'datetime',
+                options: {
+                    format: 'DD/MM/YYYY'
+                },
+                placeholder: 'Data',
+            }
+        }
     }
 
     return (

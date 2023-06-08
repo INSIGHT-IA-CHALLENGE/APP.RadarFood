@@ -74,7 +74,7 @@ function getStyle(props) {
     },
 
     text: {
-      color: theme.colors.white,
+      color: theme.colors.secondary,
       ...stylesGenerics.text
     }
   })

@@ -56,6 +56,12 @@ const list = StyleSheet.create({
         borderRadius: 50,
     },
 
+    empty:{
+        textAlign: "center",
+        fontSize: 16,
+        fontFamily: theme.fonts.roboto.regular,
+    },
+
     icons:{
         display: "flex",
         flexDirection: "row",
@@ -72,6 +78,11 @@ const list = StyleSheet.create({
     edit:{
         fontSize: 20,
         color: theme.colors.warning,
+    },
+
+    view:{
+        fontSize: 20,
+        color: theme.colors.blue,
     }
 })
 

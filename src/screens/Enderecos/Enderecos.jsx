@@ -117,13 +117,17 @@ const Enderecos = () => {
                                         </View>
 
                                         <View style={list.icons}>
-                                            <Feather name="edit" style={list.edit} onPress={() => navigation.navigate("AddEditEndereco", {endereco: endereco})} />
+                                            <Feather name="edit" style={list.edit} onPress={() => navigation.navigate("AddEditEndereco", { endereco: endereco })} />
                                             <Feather name="trash" style={list.delete} onPress={() => handleDelete(endereco?.id)} />
                                         </View>
                                     </View>
                                 ))
                             }
                         </View>
+                }
+                {
+                    enderecos?.length === 0
+                    && <Text style={list.empty}>Nenhum endereço encontrado</Text>
                 }
 
             </Content>

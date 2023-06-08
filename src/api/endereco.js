@@ -40,6 +40,21 @@ export async function listar(user, pesquisa, page) {
     return response
 }
 
+export async function listarTodosPorUsuario(user, page) {
+
+    const { token, prefix } = user
+
+    const response = await fetch(`${env.BASE_URL}/endereco?page=0&size=50`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `${prefix} ${token}`
+        }
+    })
+
+    return response
+}
+
 export async function alterar(user, endereco, id) {
     
         const { token, prefix } = user
