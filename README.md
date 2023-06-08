@@ -1,3 +1,11 @@
+# Grupo
+### 2TDSS
+- Breno Massa Martins RM93038
+- Gustavo Balero RM93090
+- Gustavo Henrique Moura RM94280
+- Marcelo Gimenes RM93897
+- Pedro Vidal RM93567
+
 # Instalação 
 Projeto JAVA: 
 - Buildar o projeto Spring Boot
@@ -15,4 +23,6 @@ Projeto React Native:
 Na raiz do entregavel disponibilizamos um arquivo json com todos os endpoints e dados nescessarios para testar a API, o arquivo pode ser importado no Insomnia
 
 # Vídeos
-Na raiz do projeto disponibilizamos um arquivo txt com o link do video pitch e o video de demonstração do APP em funcionamento
+Pitch: https://www.youtube.com/watch?v=I3kLXMMGGvU&ab_channel=PedroSilva
+Demonstração: https://reccloud.com/pt/u/gbhwg8g
+Na raiz do projeto também disponibilizamos um arquivo txt com o link do video pitch e o video de demonstração do APP em funcionamento
