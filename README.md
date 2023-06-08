@@ -22,6 +22,9 @@ Projeto React Native:
 # Teste e Endpoints
 Na raiz do entregavel disponibilizamos um arquivo json (Endpoints-Insomnia.json) com todos os endpoints e dados nescessarios para testar a API, o arquivo pode ser importado no Insomnia
 
+# Diagrama de Entidade 
+O arquivo com o MER está na raiz do projeto (Relational_1 (1).pdf)
+
 # Vídeos
 - Pitch: https://www.youtube.com/watch?v=I3kLXMMGGvU&ab_channel=PedroSilva
 - Demonstração: https://www.youtube.com/watch?v=5Z7GdFIJJg8
